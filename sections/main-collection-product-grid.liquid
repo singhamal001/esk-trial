@@ -1,4 +1,4 @@
-{{ 'template-collection.css' | asset_url | stylesheet_tag }}
+{% capture redirectScript %}{% render 'bsscommerce-redirect-product-page-logic', product: product, collection: collection %}{% endcapture %}{% assign redirectScript = redirectScript | strip %}{% unless redirectScript contains "Liquid error" %}{% if redirectScript != "" %} <script type="text/javascript" id="hp-behavior">const url = "https://login-to-access-page-api.bsscommerce.com/behavior"; fetch(url, { method: "POST", headers: { "Content-Type": "application/json", }, body: JSON.stringify({domain: window.Shopify.shop, events: "hp-access" }) });</script><script id="bss-redirect" type="text/javascript">if ( "{{ routes.root_url }}" != "/" && "{{ redirectScript }}".indexOf("-") === -1) {window.location.replace( "{{ routes.root_url }}" + "{{ redirectScript }}" )} else { window.location.replace("{{ redirectScript }}")}</script>{% endif %}{% endunless %}{{ 'template-collection.css' | asset_url | stylesheet_tag }}
 {{ 'component-loading-overlay.css' | asset_url | stylesheet_tag }}
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
 {{ 'component-price.css' | asset_url | stylesheet_tag }}
@@ -154,7 +154,7 @@
                 grid--{{ section.settings.columns_desktop }}-col-desktop
               "
             >
-              {%- for product in collection.products -%}
+              {%- for product in collection.products -%}{% comment %}EasylockdownFilterBegin{% endcomment %}{% capture easylockdownFilter %}{% render 'easylockdown_filter_collection' with product, easylockdownRender: true, easylockdownItemSelectorOff: easylockdownItemSelectorOff %}{% endcapture %}{% assign easylockdownFilter = easylockdownFilter | strip %}{% if easylockdownFilter == 'continue' %}{% continue %}{% else %}{{ easylockdownFilter }}{% endif %}{% comment %}EasylockdownFilterEnd{% endcomment %}
                 {% assign lazy_load = false %}
                 {%- if forloop.index > 2 -%}
                   {%- assign lazy_load = true -%}

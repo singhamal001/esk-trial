@@ -72,7 +72,14 @@
                 </small>
               </div>
             {%- else -%}
-              <div class="cart__ctas" {{ block.shopify_attributes }}>
+                <div class="cart__ctas custom__layout" {{ block.shopify_attributes }}>
+                <div class="terms-and-conditions">
+                  <div><a href="https://cdn.shopify.com/s/files/1/0721/9029/6331/files/ESK_distribution_terms_for_signature_UK_1.pdf?v=1710982743" class="terms-and-conditions--text">ESK Distribution Terms & Conditions</a></div>
+                  <div class="input_field_checkbox">
+                    <input type="checkbox" id="agreeTerms" name="agreeTerms" />
+                    <div class="label__terms">Please check if you have read and understood the terms and conditions.</div>
+                  </div>
+                </div>
                 <noscript>
                   <button type="submit" class="cart__update-button button button--secondary" form="cart">
                     {{ 'sections.cart.update' | t }}
@@ -107,6 +114,44 @@
   </div>
 </div>
 
+
+  {%  style  %} 
+
+  .custom__layout{
+    display: flex;
+    flex-direction: column;
+  }
+
+  .terms-and-conditions{
+    display: flex;
+    flex-direction: column;
+    justify-content: right;
+    align-items: end;
+
+  }
+
+  .terms-and-conditions--text{
+    text-decoration: underline;
+    color: gray;
+    text-align: right;
+    
+  }
+
+  .label__terms{
+    font-size: 12px;
+    text-align: right;
+    line-height: 1.5;
+  }
+
+  .input_field_checkbox{
+    display: flex;
+    justify-content: left;
+    align-items: start;
+    padding: 10px 0px;
+  }
+    
+   {% endstyle %}
+
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     function isIE() {
@@ -124,6 +169,27 @@
     document.querySelector('#cart').appendChild(cartSubmitInput);
     document.querySelector('#checkout').addEventListener('click', function (event) {
       document.querySelector('#cart').submit();
+    });
+  });
+
+
+  document.addEventListener("DOMContentLoaded", function() {
+  var checkbox = document.getElementById('agreeTerms');
+  var checkoutButton = document.getElementById('checkout');
+  var additionalButtons = document.querySelector('.additional-checkout-buttons');
+
+    // Disable checkout button by default
+    checkoutButton.disabled = true;
+    additionalButtons.style.display = 'none';
+
+    checkbox.addEventListener('change', function() {
+      if (checkbox.checked) {
+        checkoutButton.disabled = false;
+        additionalButtons.style.display = 'block';
+      } else {
+        checkoutButton.disabled = true;
+        additionalButtons.style.display = 'none';
+      }
     });
   });
 </script>
